@@ -62,8 +62,7 @@ class TypeDefinition {
         // when array is empty insert Null just to warn the user
         elemType = 'Null';
       }
-      return TypeDefinition(type,
-          astNode: astNode, subtype: elemType, isAmbiguous: isAmbiguous);
+      return TypeDefinition(type, astNode: astNode, subtype: elemType, isAmbiguous: isAmbiguous);
     }
     return TypeDefinition(type, astNode: astNode, isAmbiguous: isAmbiguous);
   }
@@ -90,20 +89,13 @@ class TypeDefinition {
   @override
   bool operator ==(dynamic other) {
     if (other is TypeDefinition) {
-      return name == other.name &&
-          subtype == other.subtype &&
-          isAmbiguous == other.isAmbiguous &&
-          _isPrimitive == other._isPrimitive;
+      return name == other.name && subtype == other.subtype && isAmbiguous == other.isAmbiguous && _isPrimitive == other._isPrimitive;
     }
     return false;
   }
 
   @override
-  int get hashCode =>
-      name.hashCode ^
-      subtype.hashCode ^
-      isAmbiguous.hashCode ^
-      _isPrimitive.hashCode;
+  int get hashCode => name.hashCode ^ subtype.hashCode ^ isAmbiguous.hashCode ^ _isPrimitive.hashCode;
 
   bool get isPrimitive => _isPrimitive;
 
@@ -111,7 +103,7 @@ class TypeDefinition {
 
   String _buildParseClass(String expression) {
     final properType = subtype ?? name;
-    return '$properType.fromJson($expression)';
+    return ' ${properType!.replaceAll("?", "")}().fromJson($expression)';
   }
 
   String _buildToJsonClass(String expression, {bool nullSafe = false}) {
@@ -123,47 +115,48 @@ class TypeDefinition {
 
   String jsonParseExpression(String key, bool privateField) {
     final jsonKey = "json['$key']";
-    final fieldKey =
-        fixFieldName(key, typeDef: this, privateField: privateField);
+    final fieldKey = fixFieldName(key, typeDef: this, privateField: privateField);
     if (isPrimitive) {
       if (name == 'List') {
-        return "$fieldKey = json['$key'].cast<$subtype>();";
+        return "$fieldKey : (json['$key']!=null) ? List<$subtype>.from(json['$key']) : null,";
       }
-      return "$fieldKey = json['$key'];";
+      return "$fieldKey : json['$key'],";
     } else if (name == 'List' && subtype == 'DateTime') {
-      return "$fieldKey = json['$key'].map((v) => DateTime.tryParse(v));";
+      return "$fieldKey : json['$key'].map((v) => DateTime.tryParse(v)),";
     } else if (name == 'DateTime') {
-      return "$fieldKey = DateTime.tryParse(json['$key']);";
+      return "$fieldKey : DateTime.tryParse(json['$key']),";
     } else if (name == 'List') {
       // list of class
-      return "if (json['$key'] != null) {\n\t\t\t$fieldKey = <$subtype>[];"
-          "\n\t\t\tjson['$key'].forEach((v) { "
-          '$fieldKey${PubspecUtils.nullSafeSupport ? '?' : ''}.add($subtype.fromJson(v)); });\n\t\t}';
+
+      return "$fieldKey: json['$fieldKey'] != null ? List<$subtype>.from(( json['$fieldKey'] as List).map((x) => $subtype().fromJson(x))) : null,";
     } else {
       // class
-      return "$fieldKey = json['$key'] != null ?"
-          ' ${_buildParseClass(jsonKey)} : null;';
+      return "$fieldKey : json['$key'] != null ? ${_buildParseClass(jsonKey)} : null,";
     }
   }
 
   String toJsonExpression(String key, bool privateField) {
-    final fieldKey =
-        fixFieldName(key, typeDef: this, privateField: privateField);
-    //final thisKey = 'this.$fieldKey';
-    final thisKey = fieldKey;
+    final fieldKey = fixFieldName(key, typeDef: this, privateField: privateField);
+
     if (isPrimitive) {
-      return "data['$key'] = $thisKey;";
+      return "($fieldKey != null) ? data['$key'] = $fieldKey : null;";
     } else if (name == 'List') {
       // class list
-      return """if ($thisKey != null) {
-      data['$key'] = $thisKey${PubspecUtils.nullSafeSupport ? '?' : ''}.map((v) => ${_buildToJsonClass('v', nullSafe: false)}).toList();
-    }""";
+      return """
+      (data['$key'] != null) ? data['$key'] = $fieldKey!.map((v) => ${_buildToJsonClass('v')}).toList(): null;
+    """;
     } else {
       // class
-      return """if ($thisKey != null) {
-      data['$key'] = ${_buildToJsonClass(thisKey, nullSafe: PubspecUtils.nullSafeSupport)};
-    }""";
+      return """($fieldKey != null) ? 
+      data['$key'] = ${_buildToJsonClass(fieldKey, nullSafe: PubspecUtils.nullSafeSupport)}: null;
+    """;
     }
+  }
+
+  String jsonParseCopyWith(String key, bool privateField) {
+    final fieldKey = fixFieldName(key, typeDef: this, privateField: privateField);
+
+    return '$fieldKey : $fieldKey ?? this.$fieldKey,';
   }
 }
 
@@ -200,8 +193,7 @@ class ClassDefinition {
     return dependenciesList;
   }
 
-  ClassDefinition(this._name,
-      [this._privateFields = false, this._withCopyConstructor = false]);
+  ClassDefinition(this._name, [this._privateFields = false, this._withCopyConstructor = false]);
 
   @override
   bool operator ==(dynamic other) {
@@ -250,8 +242,7 @@ class ClassDefinition {
   String _generateFieldList({int indentLevel = 1, String delimiter = ';'}) {
     return fields.keys.map((key) {
       final f = fields[key]!;
-      final fieldName =
-          fixFieldName(key, typeDef: f, privateField: privateFields);
+      final fieldName = fixFieldName(key, typeDef: f, privateField: privateFields);
       final sb = StringBuffer();
       sb.write('\t ' * indentLevel);
       _addTypeDef(f, sb);
@@ -267,10 +258,8 @@ class ClassDefinition {
   String get _gettersSetters {
     return fields.keys.map((key) {
       final f = fields[key]!;
-      final publicFieldName =
-          fixFieldName(key, typeDef: f, privateField: false);
-      final privateFieldName =
-          fixFieldName(key, typeDef: f, privateField: true);
+      final publicFieldName = fixFieldName(key, typeDef: f, privateField: false);
+      final privateFieldName = fixFieldName(key, typeDef: f, privateField: true);
       final sb = StringBuffer();
       sb.write('\t');
       _addTypeDef(f, sb);
@@ -289,8 +278,7 @@ class ClassDefinition {
     var len = fields.keys.length - 1;
     for (var key in fields.keys) {
       final f = fields[key]!;
-      final publicFieldName =
-          fixFieldName(key, typeDef: f, privateField: false);
+      final publicFieldName = fixFieldName(key, typeDef: f, privateField: false);
       _addTypeDef(f, sb);
       sb.write(' $publicFieldName');
       if (i != len) {
@@ -301,10 +289,8 @@ class ClassDefinition {
     sb.write('}) {\n');
     for (var key in fields.keys) {
       final f = fields[key];
-      final publicFieldName =
-          fixFieldName(key, typeDef: f, privateField: false);
-      final privateFieldName =
-          fixFieldName(key, typeDef: f, privateField: true);
+      final publicFieldName = fixFieldName(key, typeDef: f, privateField: false);
+      final privateFieldName = fixFieldName(key, typeDef: f, privateField: true);
       //sb.write('this.$privateFieldName = $publicFieldName;\n');
       sb.write('$privateFieldName = $publicFieldName;\n');
     }
@@ -320,8 +306,7 @@ class ClassDefinition {
     var len = fields.keys.length - 1;
     for (var key in fields.keys) {
       final f = fields[key];
-      final fieldName =
-          fixFieldName(key, typeDef: f, privateField: privateFields);
+      final fieldName = fixFieldName(key, typeDef: f, privateField: privateFields);
       sb.write('this.$fieldName');
       //sb.write('$fieldName');
       if (i != len) {
@@ -343,8 +328,7 @@ class ClassDefinition {
 
     for (var key in fields.keys) {
       final f = fields[key];
-      final fieldName =
-          fixFieldName(key, typeDef: f, privateField: privateFields);
+      final fieldName = fixFieldName(key, typeDef: f, privateField: privateFields);
       sb.write('$fieldName: $fieldName ?? this.$fieldName,');
     }
 
@@ -355,19 +339,18 @@ class ClassDefinition {
 
   String get _jsonParseFunc {
     final sb = StringBuffer();
-    sb.write('\t$name');
-    sb.write('.fromJson(Map<String, dynamic> json) {\n');
+    sb.write('\t@override\n\t');
+    sb.write('\t$name fromJson(Map<String, dynamic> json) => $name(\n');
     for (var k in fields.keys) {
       sb.write('\t\t${fields[k]!.jsonParseExpression(k, privateFields)}\n');
     }
-    sb.write('\t}');
+    sb.write('\t);');
     return sb.toString();
   }
 
   String get _jsonGenFunc {
     final sb = StringBuffer();
-    sb.write('\tMap<String, dynamic> toJson() {\n\t\t'
-        'final  data = <String, dynamic>{};\n');
+    sb.write('\t@override\n\tMap<String, dynamic> toJson() {\n\t\tfinal data =  <String, dynamic>{};\n');
     for (var k in fields.keys) {
       sb.write('\t\t${fields[k]!.toJsonExpression(k, privateFields)}\n');
     }
@@ -376,23 +359,34 @@ class ClassDefinition {
     return sb.toString();
   }
 
-  @override
-  String toString() {
-    if (privateFields) {
-      return 'class $name {\n$_fieldList\n\n$_defaultPrivateConstructor\n\n'
-          '$_gettersSetters\n\n$_jsonParseFunc\n\n$_jsonGenFunc\n}\n';
-    } else {
-      if (copyConstructor!) {
-        return 'class $name {\n$_fieldList\n\n$_defaultConstructor'
-            '\n\n$_copyConstructor\n\n$_jsonParseFunc\n\n$_jsonGenFunc\n}\n';
-      } else {
-        return 'class $name {\n$_fieldList\n\n$_defaultConstructor'
-            '\n\n$_jsonParseFunc\n\n$_jsonGenFunc\n}\n';
-      }
-    }
+  String get _copyWith {
+    final sb = StringBuffer();
+    sb.write('''\t 
+    $name copyWith({
+      ${_fieldList.replaceAll(";", ",")}
+    }) => $name(''');
+
+    fields.keys.forEach((k) {
+      sb.write('${fields[k]!.jsonParseCopyWith(k, privateFields)}\n');
+    });
+
+    sb.write(');');
+    return sb.toString();
   }
 
   @override
-  // TODO: implement hashCode
-  int get hashCode => super.hashCode;
+  String toString() {
+    if (privateFields) {
+      return 'class $name extends BaseModel<$name> {\n$_fieldList\n\n$_defaultPrivateConstructor\n\n'
+          '$_gettersSetters\n\n$_jsonParseFunc\n\n$_jsonGenFunc\n$_copyWith\n }\n';
+    } else {
+      if (copyConstructor!) {
+        return 'class $name extends BaseModel<$name> {\n$_fieldList\n\n$_defaultConstructor'
+            '\n\n$_copyConstructor\n\n$_jsonParseFunc\n\n$_jsonGenFunc\n$_copyWith\n }\n';
+      } else {
+        return 'class $name extends BaseModel<$name> {\n$_fieldList\n\n$_defaultConstructor'
+            '\n\n$_jsonParseFunc\n\n$_jsonGenFunc\n$_copyWith\n }\n';
+      }
+    }
+  }
 }

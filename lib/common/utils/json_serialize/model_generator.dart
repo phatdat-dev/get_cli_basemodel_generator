@@ -30,10 +30,7 @@ class ModelGenerator {
   final Map<String, String> sameClassMapping = HashMap<String, String>();
   late List<Hint> hints;
 
-  ModelGenerator(this._rootClassName,
-      [this._privateFields = false,
-      this._withCopyConstructor,
-      List<Hint>? hints]) {
+  ModelGenerator(this._rootClassName, [this._privateFields = false, this._withCopyConstructor, List<Hint>? hints]) {
     if (hints != null) {
       this.hints = hints;
     } else {
@@ -45,8 +42,7 @@ class ModelGenerator {
     return hints.firstWhereOrNull((h) => h.path == path);
   }
 
-  List<Warning> _generateClassDefinition(String className,
-      dynamic jsonRawDynamicData, String path, Node? astNode) {
+  List<Warning> _generateClassDefinition(String className, dynamic jsonRawDynamicData, String path, Node? astNode) {
     var warnings = <Warning>[];
     if (jsonRawDynamicData is List) {
       // if first element is an array, start in the first element.
@@ -55,8 +51,7 @@ class ModelGenerator {
     } else {
       final jsonRawData = jsonRawDynamicData as Map;
       final keys = jsonRawData.keys.cast<String>();
-      var classDefinition =
-          ClassDefinition(className, _privateFields, _withCopyConstructor);
+      var classDefinition = ClassDefinition(className, _privateFields, _withCopyConstructor);
 
       for (var key in keys) {
         TypeDefinition typeDef;
@@ -85,16 +80,11 @@ class ModelGenerator {
         classDefinition.addField(key, typeDef);
       }
 
-      final similarClass =
-          allClasses.firstWhereOrNull((cd) => cd == classDefinition);
+      final similarClass = allClasses.firstWhereOrNull((cd) => cd == classDefinition);
       if (similarClass != null) {
-        final similarClassName = PubspecUtils.nullSafeSupport
-            ? '${similarClass.name}?'
-            : similarClass.name;
+        final similarClassName = PubspecUtils.nullSafeSupport ? '${similarClass.name}?' : similarClass.name;
 
-        final currentClassName = PubspecUtils.nullSafeSupport
-            ? '${classDefinition.name}?'
-            : classDefinition.name;
+        final currentClassName = PubspecUtils.nullSafeSupport ? '${classDefinition.name}?' : classDefinition.name;
 
         sameClassMapping[currentClassName] = similarClassName;
       } else {
@@ -112,22 +102,18 @@ class ModelGenerator {
             // into a single one
             dynamic toAnalyze;
             if (!dependency.typeDef.isAmbiguous!) {
-              var mergeWithWarning = mergeObjectList(
-                  jsonRawData[dependency.name] as List,
-                  '$path/${dependency.name}');
+              var mergeWithWarning = mergeObjectList(jsonRawData[dependency.name] as List, '$path/${dependency.name}');
               toAnalyze = mergeWithWarning.result;
               warnings.addAll(mergeWithWarning.warnings);
             } else {
               toAnalyze = jsonRawData[dependency.name][0];
             }
             final node = navigateNode(astNode, dependency.name);
-            warns = _generateClassDefinition(dependency.className, toAnalyze,
-                '$path/${dependency.name}', node);
+            warns = _generateClassDefinition(dependency.className, toAnalyze, '$path/${dependency.name}', node);
           }
         } else {
           final node = navigateNode(astNode, dependency.name);
-          warns = _generateClassDefinition(dependency.className,
-              jsonRawData[dependency.name], '$path/${dependency.name}', node);
+          warns = _generateClassDefinition(dependency.className, jsonRawData[dependency.name], '$path/${dependency.name}', node);
         }
         if (warns != null) {
           warnings.addAll(warns);
@@ -144,8 +130,7 @@ class ModelGenerator {
   DartCode generateUnsafeDart(String rawJson) {
     final jsonRawData = decodeJSON(rawJson);
     final astNode = parse(rawJson, Settings());
-    var warnings =
-        _generateClassDefinition(_rootClassName, jsonRawData, '', astNode);
+    var warnings = _generateClassDefinition(_rootClassName, jsonRawData, '', astNode);
     // after generating all classes, replace the omited similar classes.
     for (var c in allClasses) {
       final fieldsKeys = c.fields.keys;
@@ -159,17 +144,15 @@ class ModelGenerator {
 
         // check subtype for list
         if (fieldName == 'List') {
-          fieldName = PubspecUtils.nullSafeSupport
-              ? '${typeForField.subtype}?'
-              : typeForField.subtype;
+          fieldName = PubspecUtils.nullSafeSupport ? '${typeForField.subtype}?' : typeForField.subtype;
 
           if (sameClassMapping.containsKey(fieldName)) {
-            c.fields[f]!.subtype =
-                sameClassMapping[fieldName]!.replaceAll('?', '');
+            c.fields[f]!.subtype = sameClassMapping[fieldName]!.replaceAll('?', '');
           }
         }
       }
     }
+
     return DartCode(allClasses.map((c) => c.toString()).join('\n'), warnings);
   }
 
@@ -180,7 +163,6 @@ class ModelGenerator {
   DartCode generateDartClasses(String rawJson) {
     final unsafeDartCode = generateUnsafeDart(rawJson);
     final formatter = DartFormatter();
-    return DartCode(
-        formatter.format(unsafeDartCode.code), unsafeDartCode.warnings);
+    return DartCode(formatter.format(unsafeDartCode.code), unsafeDartCode.warnings);
   }
 }

@@ -1,6 +1,5 @@
 import 'dart:io';
 
-
 import 'package:dcli/dcli.dart';
 import 'package:http/http.dart';
 import 'package:path/path.dart' as p;
@@ -23,6 +22,7 @@ class GenerateModelCommand extends Command {
   @override
   Future<void> execute() async {
     var name = p.basenameWithoutExtension(withArgument).pascalCase;
+
     if (withArgument.isEmpty) {
       // final dialog = CLI_Dialog(questions: [
       //   [LocaleKeys.ask_model_name.tr, 'name']
@@ -33,21 +33,21 @@ class GenerateModelCommand extends Command {
     }
 
     FileModel newFileModel;
-    final classGenerator = ModelGenerator(
-        name, containsArg('--private'), containsArg('--withCopy'));
+    final classGenerator = ModelGenerator(name, containsArg('--private'), containsArg('--withCopy'));
 
     newFileModel = Structure.model(name, 'model', false, on: onCommand);
 
-    var dartCode = classGenerator.generateDartClasses(await _jsonRawData);
+    var dartCode = classGenerator.generateUnsafeDart(await _jsonRawData);
 
     var modelPath = '${newFileModel.path}_model.dart';
 
     var model = writeFile(modelPath, dartCode.result, overwrite: true);
 
+    // // warrning dartCode
     for (var warning in dartCode.warnings) {
       LogService.info('warning: ${warning.path} ${warning.warning} ');
     }
-    if (!containsArg('--skipProvider')) {
+    if (containsArg('--skipProvider')) {
       var pathSplit = Structure.safeSplitPath(modelPath);
       pathSplit.removeWhere((element) => element == '.' || element == 'lib');
       handleFileCreate(
@@ -70,12 +70,9 @@ class GenerateModelCommand extends Command {
 
   @override
   bool validate() {
-    if ((withArgument.isEmpty || p.extension(withArgument) != '.json') &&
-        fromArgument.isEmpty) {
-      var codeSample =
-          'get generate model on home with assets/models/user.json';
-      throw CliException(LocaleKeys.error_invalid_json.trArgs([withArgument]),
-          codeSample: codeSample);
+    if ((withArgument.isEmpty || p.extension(withArgument) != '.json') && fromArgument.isEmpty) {
+      var codeSample = 'get generate model on home with assets/models/user.json';
+      throw CliException(LocaleKeys.error_invalid_json.trArgs([withArgument]), codeSample: codeSample);
     }
     return true;
   }
@@ -88,16 +85,13 @@ class GenerateModelCommand extends Command {
         var result = await get(Uri.parse(fromArgument));
         return result.body;
       } on Exception catch (_) {
-        throw CliException(
-            LocaleKeys.error_failed_to_connect.trArgs([fromArgument]));
+        throw CliException(LocaleKeys.error_failed_to_connect.trArgs([fromArgument]));
       }
     }
   }
 
-  final String? codeSample1 = LogService.code(
-      'get generate model on home with assets/models/user.json');
-  final String? codeSample2 = LogService.code(
-      'get generate model on home from "https://api.github.com/users/CpdnCristiano"');
+  final String? codeSample1 = LogService.code('get generate model on home with assets/models/user.json');
+  final String? codeSample2 = LogService.code('get generate model on home from "https://api.github.com/users/CpdnCristiano"');
 
   @override
   String get codeSample => '''

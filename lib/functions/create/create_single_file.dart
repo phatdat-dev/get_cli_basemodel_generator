@@ -10,15 +10,12 @@ import '../../core/structure.dart';
 import '../../samples/interface/sample_interface.dart';
 import '../sorter_imports/sort.dart';
 
-File handleFileCreate(String name, String command, String on, bool extraFolder,
-    Sample sample, String folderName,
-    [String sep = '_']) {
+File handleFileCreate(String name, String command, String on, bool extraFolder, Sample sample, String folderName, [String sep = '_']) {
   folderName = folderName;
   /* if (folderName.isNotEmpty) {
     extraFolder = PubspecUtils.extraFolder ?? extraFolder;
   } */
-  final fileModel = Structure.model(name, command, extraFolder,
-      on: on, folderName: folderName);
+  final fileModel = Structure.model(name, command, extraFolder, on: on, folderName: folderName);
   var path = '${fileModel.path}$sep${fileModel.commandName}.dart';
   sample.path = path;
   return sample.create();
@@ -26,11 +23,7 @@ File handleFileCreate(String name, String command, String on, bool extraFolder,
 
 /// Create or edit the contents of a file
 File writeFile(String path, String content,
-    {bool overwrite = false,
-    bool skipFormatter = false,
-    bool logger = true,
-    bool skipRename = false,
-    bool useRelativeImport = false}) {
+    {bool overwrite = false, bool skipFormatter = false, bool logger = true, bool skipRename = false, bool useRelativeImport = false}) {
   var newFile = File(Structure.replaceAsExpected(path: path));
 
   if (!newFile.existsSync() || overwrite) {
@@ -45,8 +38,7 @@ File writeFile(String path, String content,
           );
         } on Exception catch (_) {
           if (newFile.existsSync()) {
-            LogService.info(
-                LocaleKeys.error_invalid_dart.trArgs([newFile.path]));
+            LogService.info(LocaleKeys.error_invalid_dart.trArgs([newFile.path]));
           }
           rethrow;
         }
@@ -56,8 +48,7 @@ File writeFile(String path, String content,
       var separatorFileType = PubspecUtils.separatorFileType!;
       if (separatorFileType.isNotEmpty) {
         newFile = newFile.existsSync()
-            ? newFile = newFile
-                .renameSync(replacePathTypeSeparator(path, separatorFileType))
+            ? newFile = newFile.renameSync(replacePathTypeSeparator(path, separatorFileType))
             : File(replacePathTypeSeparator(path, separatorFileType));
       }
     }

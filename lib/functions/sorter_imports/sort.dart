@@ -15,7 +15,8 @@ String sortImports(
   bool useRelative = false,
 }) {
   packageName = packageName ?? PubspecUtils.projectName;
-  content = formatterDartFile(content);
+  //khong cho no check loi format dart
+  // content = formatterDartFile(content);
   var lines = LineSplitter.split(content).toList();
 
   var contentLines = <String>[];
@@ -30,9 +31,7 @@ String sortImports(
 
   var stringLine = false;
   for (var i = 0; i < lines.length; i++) {
-    if (lines[i].startsWith('import ') &&
-        !stringLine &&
-        lines[i].endsWith(';')) {
+    if (lines[i].startsWith('import ') && !stringLine && lines[i].endsWith(';')) {
       if (lines[i].contains('dart:')) {
         dartImports.add(lines[i]);
       } else if (lines[i].contains('package:flutter/')) {
@@ -46,13 +45,9 @@ String sortImports(
           packageImports.add(lines[i]);
         }
       }
-    } else if (lines[i].startsWith('export ') &&
-        lines[i].endsWith(';') &&
-        !stringLine) {
+    } else if (lines[i].startsWith('export ') && lines[i].endsWith(';') && !stringLine) {
       exports.add(lines[i]);
-    } else if (lines[i].startsWith('library ') &&
-        lines[i].endsWith(';') &&
-        !stringLine) {
+    } else if (lines[i].startsWith('library ') && lines[i].endsWith(';') && !stringLine) {
       librarys.add(lines[i]);
     } else {
       var containsThreeQuotes = lines[i].contains("'''");
@@ -78,8 +73,7 @@ String sortImports(
     projectRelativeImports.replaceAll(_replacePath);
   }
   if (filePath.isNotEmpty && useRelative) {
-    projectImports
-        .replaceAll((element) => replaceToRelativeImport(element, filePath));
+    projectImports.replaceAll((element) => replaceToRelativeImport(element, filePath));
     projectRelativeImports.addAll(projectImports);
     projectImports.clear();
   }
@@ -112,7 +106,8 @@ String sortImports(
     ...contentLines
   ]);
 
-  return formatterDartFile(sortedLines.join('\n'));
+  return sortedLines.join('\n');
+  // return formatterDartFile(sortedLines.join('\n'));
 }
 
 String _replacePath(String str) {

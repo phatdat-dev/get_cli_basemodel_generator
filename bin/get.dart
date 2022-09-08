@@ -3,6 +3,7 @@ import 'package:get_cli/exception_handler/exception_handler.dart';
 import 'package:get_cli/functions/version/version_update.dart';
 import 'package:get_cli/get_cli.dart';
 
+//dart pub global activate --source path .
 Future<void> main(List<String> arguments) async {
   var time = Stopwatch();
   time.start();
