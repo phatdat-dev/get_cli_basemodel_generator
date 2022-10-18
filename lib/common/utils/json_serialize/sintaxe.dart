@@ -143,7 +143,7 @@ class TypeDefinition {
     } else if (name == 'List') {
       // class list
       return """
-      (data['$key'] != null) ? data['$key'] = $fieldKey!.map((v) => ${_buildToJsonClass('v')}).toList(): null;
+      ($fieldKey != null) ? data['$key'] = $fieldKey!.map((v) => ${_buildToJsonClass('v')}).toList(): null;
     """;
     } else {
       // class
