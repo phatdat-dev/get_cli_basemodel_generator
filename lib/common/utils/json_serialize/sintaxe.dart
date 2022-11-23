@@ -119,6 +119,10 @@ class TypeDefinition {
     if (isPrimitive) {
       if (name == 'List') {
         return "$fieldKey : (json['$key']!=null) ? List<$subtype>.from(json['$key']) : null,";
+      } else if (name == 'int?') {
+        return "$fieldKey : (json['$key'] as num?)?.toInt(),";
+      } else if (name == 'double?') {
+        return "$fieldKey : (json['$key'] as num?)?.toDouble(),";
       }
       return "$fieldKey : json['$key'],";
     } else if (name == 'List' && subtype == 'DateTime') {
@@ -366,9 +370,9 @@ class ClassDefinition {
       ${_fieldList.replaceAll(";", ",")}
     }) => $name(''');
 
-    fields.keys.forEach((k) {
+    for (var k in fields.keys) {
       sb.write('${fields[k]!.jsonParseCopyWith(k, privateFields)}\n');
-    });
+    }
 
     sb.write(');');
     return sb.toString();
@@ -389,4 +393,8 @@ class ClassDefinition {
       }
     }
   }
+
+  @override
+  // TODO: implement hashCode
+  int get hashCode => super.hashCode;
 }
