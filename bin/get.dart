@@ -4,6 +4,7 @@ import 'package:get_cli/functions/version/version_update.dart';
 import 'package:get_cli/get_cli.dart';
 
 //dart pub global activate --source path .
+//get.bat from     %USERPROFILE%\AppData\Local\Pub\Cache\bin
 Future<void> main(List<String> arguments) async {
   var time = Stopwatch();
   time.start();
