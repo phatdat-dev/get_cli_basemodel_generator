@@ -143,16 +143,21 @@ class TypeDefinition {
     final fieldKey = fixFieldName(key, typeDef: this, privateField: privateField);
 
     if (isPrimitive) {
-      return "($fieldKey != null) ? data['$key'] = $fieldKey : null;";
+      return """ if ($fieldKey != null) {
+         data['$key'] = $fieldKey;
+         }
+""";
     } else if (name == 'List') {
       // class list
-      return """
-      ($fieldKey != null) ? data['$key'] = $fieldKey!.map((v) => ${_buildToJsonClass('v')}).toList(): null;
+      return """ if ($fieldKey != null) {
+         data['$key'] = $fieldKey!.map((v) => ${_buildToJsonClass('v')}).toList();
+      }
     """;
     } else {
       // class
-      return """($fieldKey != null) ? 
-      data['$key'] = ${_buildToJsonClass(fieldKey, nullSafe: PubspecUtils.nullSafeSupport)}: null;
+      return """ if ($fieldKey != null) {
+        data['$key'] = ${_buildToJsonClass(fieldKey, nullSafe: PubspecUtils.nullSafeSupport)};
+      }
     """;
     }
   }
@@ -393,8 +398,4 @@ class ClassDefinition {
       }
     }
   }
-
-  @override
-  // TODO: implement hashCode
-  int get hashCode => super.hashCode;
 }
