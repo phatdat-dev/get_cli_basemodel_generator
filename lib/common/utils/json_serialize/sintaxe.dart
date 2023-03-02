@@ -143,22 +143,13 @@ class TypeDefinition {
     final fieldKey = fixFieldName(key, typeDef: this, privateField: privateField);
 
     if (isPrimitive) {
-      return """ if ($fieldKey != null) {
-         data['$key'] = $fieldKey;
-         }
-""";
+      return "if ($fieldKey != null) { data['$key'] = $fieldKey; }";
     } else if (name == 'List') {
       // class list
-      return """ if ($fieldKey != null) {
-         data['$key'] = $fieldKey!.map((v) => ${_buildToJsonClass('v')}).toList();
-      }
-    """;
+      return "if ($fieldKey != null) { data['$key'] = $fieldKey!.map((v) => ${_buildToJsonClass('v')}).toList(); }";
     } else {
       // class
-      return """ if ($fieldKey != null) {
-        data['$key'] = ${_buildToJsonClass(fieldKey, nullSafe: PubspecUtils.nullSafeSupport)};
-      }
-    """;
+      return "if ($fieldKey != null) { data['$key'] = ${_buildToJsonClass(fieldKey, nullSafe: PubspecUtils.nullSafeSupport)}; }";
     }
   }
 
