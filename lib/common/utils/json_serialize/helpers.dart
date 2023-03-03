@@ -13,8 +13,8 @@ const Map<String, bool> PRIMITIVE_TYPES = {
   'double': true,
   'String': true,
   'bool': true,
-  'DateTime': false,
-  'List<DateTime>': false,
+  'DateTime': true,
+  'List<DateTime>': true,
   'List<int>': true,
   'List<double>': true,
   'List<String>': true,
@@ -55,11 +55,9 @@ MergeableListType mergeableListType(List<dynamic> list) {
 }
 
 String camelCase(String text) {
-  String capitalize(Match m) =>
-      m[0]!.substring(0, 1).toUpperCase() + m[0]!.substring(1);
+  String capitalize(Match m) => m[0]!.substring(0, 1).toUpperCase() + m[0]!.substring(1);
   String skip(String s) => '';
-  return text.splitMapJoin(RegExp(r'[a-zA-Z0-9]+'),
-      onMatch: capitalize, onNonMatch: skip);
+  return text.splitMapJoin(RegExp(r'[a-zA-Z0-9]+'), onMatch: capitalize, onNonMatch: skip);
 }
 
 String camelCaseFirstLower(String text) {
@@ -95,8 +93,7 @@ WithWarning<Map> mergeObj(Map obj, Map other, String path) {
         if (t == 'int' && otherType == 'double') {
           // if double was found instead of int, assign the double
           clone[k] = v;
-        } else if (clone[k].runtimeType.toString() != 'double' &&
-            v.runtimeType.toString() != 'int') {
+        } else if (clone[k].runtimeType.toString() != 'double' && v.runtimeType.toString() != 'int') {
           // if types are not equal, then
           warnings.add(newAmbiguousType('$path/$k'));
         }
@@ -126,8 +123,7 @@ WithWarning<Map> mergeObj(Map obj, Map other, String path) {
   return WithWarning(clone, warnings);
 }
 
-WithWarning<Map> mergeObjectList(List<dynamic> list, String path,
-    [int idx = -1]) {
+WithWarning<Map> mergeObjectList(List<dynamic> list, String path, [int idx = -1]) {
   var warnings = <Warning>{};
   var obj = {};
   for (var i = 0; i < list.length; i++) {
@@ -198,8 +194,7 @@ bool isPrimitiveType(String? typeName) {
   return isPrimitive;
 }
 
-String fixFieldName(String name,
-    {TypeDefinition? typeDef, bool privateField = false}) {
+String fixFieldName(String name, {TypeDefinition? typeDef, bool privateField = false}) {
   var properName = name;
   if (name.startsWith('_') || name.startsWith(RegExp(r'[0-9]'))) {
     final firstCharType = typeDef!.name!.substring(0, 1).toLowerCase();
@@ -214,7 +209,7 @@ String fixFieldName(String name,
 
 String getTypeName(dynamic obj) {
   if (obj is String) {
-    return 'String';
+    return (DateTime.tryParse(obj) != null) ? 'DateTime' : 'String';
   } else if (obj is int) {
     return 'int';
   } else if (obj is double) {
@@ -288,6 +283,5 @@ bool _isDoubleWithExponential(String integer, String comma, String exponent) {
   if (exponentNumber > 0) {
     return exponentNumber < comma.length && commaNumber > 0;
   }
-  return commaNumber > 0 ||
-      ((integerNumber.toDouble() * pow(10, exponentNumber)).remainder(1) > 0);
+  return commaNumber > 0 || ((integerNumber.toDouble() * pow(10, exponentNumber)).remainder(1) > 0);
 }

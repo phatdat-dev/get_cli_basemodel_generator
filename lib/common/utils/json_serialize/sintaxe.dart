@@ -70,9 +70,8 @@ class TypeDefinition {
   TypeDefinition(this.name, {this.subtype, this.isAmbiguous, Node? astNode}) {
     if (subtype == null) {
       _isPrimitive = isPrimitiveType(name);
-      if (name == 'int' && isASTLiteralDouble(astNode)) {
-        name = 'double';
-      }
+
+      if (name == 'int' && isASTLiteralDouble(astNode)) name = 'double';
     } else {
       _isPrimitive = isPrimitiveType('$name<$subtype>');
     }

@@ -1,0 +1,18 @@
+{
+  "intt": 0,
+  "listIntt": [1, 2, 3, 4, 5],
+  "doublee": 1.2,
+  "listDoublee": [1.2, 2.3, 3.4, 4.5, 5.7],
+  "stringg": "string",
+  "listString": ["a", "b", "c", "d", "e", "f"],
+  "datee": "2023-03-02T04:32:00.580Z",
+  "listDate": [
+    "2023-03-02T04:32:00.580Z",
+    "2022-03-02T04:32:00.580Z",
+    "2021-03-02T04:32:00.580Z",
+    "2020-03-02T04:32:00.580Z"
+  ],
+  "booll": true,
+  "listBool": [true, false, true, false, true, false],
+  "nulll": null
+}
