@@ -142,6 +142,7 @@ class TypeDefinition {
     final fieldKey = fixFieldName(key, typeDef: this, privateField: privateField);
 
     if (isPrimitive) {
+      if (name!.contains('DateTime')) return "if ($fieldKey != null) { data['$key'] = $fieldKey?.toIso8601String(); }";
       return "if ($fieldKey != null) { data['$key'] = $fieldKey; }";
     } else if (name == 'List') {
       // class list
