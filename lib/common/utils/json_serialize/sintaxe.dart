@@ -122,12 +122,14 @@ class TypeDefinition {
         return "$fieldKey : (json['$key'] as num?)?.toInt(),";
       } else if (name == 'double?') {
         return "$fieldKey : (json['$key'] as num?)?.toDouble(),";
+      } else if (name == 'DateTime?') {
+        return "$fieldKey : json['$key'] !=null ? DateTime.tryParse(json['$key']) : null,";
       }
       return "$fieldKey : json['$key'],";
     } else if (name == 'List' && subtype == 'DateTime') {
       return "$fieldKey : json['$key'].map((v) => DateTime.tryParse(v)),";
     } else if (name == 'DateTime') {
-      return "$fieldKey : DateTime.tryParse(json['$key']),";
+      return "$fieldKey : json['$key'] !=null ? DateTime.tryParse(json['$key']) : null,";
     } else if (name == 'List') {
       // list of class
 
