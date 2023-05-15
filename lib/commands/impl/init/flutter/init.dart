@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:get_cli/samples/impl/wwww3q_datz/wwww3q_datz_assets.dart';
+
 import '../../../../common/menu/menu.dart';
 import '../../../../common/utils/logger/log_utils.dart';
 import '../../../../common/utils/pubspec/pubspec_utils.dart';
@@ -14,6 +16,19 @@ import '../../../../functions/create/create_main.dart';
 import '../../../../samples/impl/arctekko/arc_main.dart';
 import '../../../../samples/impl/arctekko/config_example.dart';
 import '../../../../samples/impl/getx_pattern/get_main.dart';
+import '../../../../samples/impl/wwww3q_datz/wwww3q_datz_core_base.dart';
+import '../../../../samples/impl/wwww3q_datz/wwww3q_datz_core_config.dart';
+import '../../../../samples/impl/wwww3q_datz/wwww3q_datz_core_constants.dart';
+import '../../../../samples/impl/wwww3q_datz/wwww3q_datz_core_services.dart';
+import '../../../../samples/impl/wwww3q_datz/wwww3q_datz_core_utils.dart';
+import '../../../../samples/impl/wwww3q_datz/wwww3q_datz_core_utils_extension.dart';
+import '../../../../samples/impl/wwww3q_datz/wwww3q_datz_firebase_options.dart';
+import '../../../../samples/impl/wwww3q_datz/wwww3q_datz_modules.dart';
+import '../../../../samples/impl/wwww3q_datz/wwww3q_datz_package_cupertino_datetime_picker.dart';
+import '../../../../samples/impl/wwww3q_datz/wwww3q_datz_custom.dart';
+import '../../../../samples/impl/wwww3q_datz/wwww3q_datz_main.dart';
+import '../../../../samples/impl/wwww3q_datz/wwww3q_datz_routes.dart';
+import '../../../../samples/impl/wwww3q_datz/wwww3q_datz_usermodel.dart';
 import '../../../interface/command.dart';
 import '../../commads_export.dart';
 import '../../install/install_get.dart';
