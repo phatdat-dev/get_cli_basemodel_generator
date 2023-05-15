@@ -1,15 +1,6 @@
-import 'dart:io';
 
-import '../../../../common/utils/logger/log_utils.dart';
-import '../../../../common/utils/pubspec/pubspec_utils.dart';
-import '../../../../core/internationalization.dart';
-import '../../../../core/locales.g.dart';
-import '../../../../core/structure.dart';
-import '../../../../functions/create/create_list_directory.dart';
-import '../../../../functions/create/create_main.dart';
-import '../../../../samples/impl/getx_pattern/get_main.dart';
-import '../../commads_export.dart';
-import '../../install/install_get.dart';
+
+part of 'init.dart';
 
 Future<void> createInitGetxPattern() async {
   var canContinue = await createMain();

@@ -6,7 +6,7 @@ import '../../../../common/utils/pubspec/pubspec_utils.dart';
 import '../../../../samples/impl/analysis_options.dart';
 import '../../../../samples/impl/get_server/pubspec.dart';
 import '../../../interface/command.dart';
-import '../flutter/init_getxpattern.dart';
+import '../flutter/init.dart';
 
 class InitGetServer extends Command {
   @override
