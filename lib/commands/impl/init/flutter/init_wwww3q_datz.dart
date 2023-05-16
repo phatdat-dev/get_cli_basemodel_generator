@@ -1,6 +1,6 @@
 part of 'init.dart';
 
-// https://github.com/wwwwww3q/flutter_getx_base_project
+// https://github.com/wwwwww3q/
 Future<void> createInitWwww3qDatz() async {
   var canContinue = await createMain();
   if (!canContinue) return;

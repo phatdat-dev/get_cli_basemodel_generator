@@ -6,8 +6,7 @@ class Wwww3qDatz_authentication_binding_Sample extends Sample {
   Wwww3qDatz_authentication_binding_Sample() : super('lib/app/modules/authentication/bindings/authentication_binding.dart', overwrite: true);
 
   @override
-  String get content =>
-      '''
+  String get content => '''
 import 'package:get/get.dart';
 
 import '../controllers/authentication_controller.dart';
@@ -27,8 +26,7 @@ class Wwww3qDatz_authentication_controller_Sample extends Sample {
   Wwww3qDatz_authentication_controller_Sample() : super('lib/app/modules/authentication/controllers/authentication_controller.dart', overwrite: true);
 
   @override
-  String get content =>
-      '''
+  String get content => '''
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -134,8 +132,7 @@ class Wwww3qDatz_authentication_view_Sample extends Sample {
   Wwww3qDatz_authentication_view_Sample() : super('lib/app/modules/authentication/views/authentication_view.dart', overwrite: true);
 
   @override
-  String get content =>
-      '''
+  String get content => '''
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -357,8 +354,7 @@ class Wwww3qDatz_custom_prefix_icon_widget_Sample extends Sample {
   Wwww3qDatz_custom_prefix_icon_widget_Sample() : super('lib/app/modules/authentication/widget/custom_prefix_icon_widget.dart', overwrite: true);
 
   @override
-  String get content =>
-      '''
+  String get content => '''
 part of '../views/authentication_view.dart';
 
 class CustomPrefixIconWidget extends StatelessWidget {
@@ -389,12 +385,11 @@ class Wwww3qDatz_forgot_password_tab_widget_Sample extends Sample {
   Wwww3qDatz_forgot_password_tab_widget_Sample() : super('lib/app/modules/authentication/widget/forgot_password_tab_widget.dart', overwrite: true);
 
   @override
-  String get content =>
-      '''
+  String get content => '''
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:flutter_getx_base_project/app/modules/authentication/controllers/authentication_controller.dart';
-import 'package:flutter_getx_base_project/generated/locales.g.dart';
+import '/app/modules/authentication/controllers/authentication_controller.dart';
+import '/generated/locales.g.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
@@ -461,8 +456,7 @@ class Wwww3qDatz_sign_in_tab_widget_Sample extends Sample {
   Wwww3qDatz_sign_in_tab_widget_Sample() : super('lib/app/modules/authentication/widget/sign_in_tab_widget.dart', overwrite: true);
 
   @override
-  String get content =>
-      '''
+  String get content => '''
 part of '../views/authentication_view.dart';
 
 class SignInTabWidget extends GetView<AuthenticationController> {
@@ -565,8 +559,7 @@ class Wwww3qDatz_sign_up_tab_widget_Sample extends Sample {
   Wwww3qDatz_sign_up_tab_widget_Sample() : super('lib/app/modules/authentication/widget/sign_up_tab_widget.dart', overwrite: true);
 
   @override
-  String get content =>
-      '''
+  String get content => '''
 part of '../views/authentication_view.dart';
 
 class SignUpTapWidget extends GetView<AuthenticationController> {
@@ -625,8 +618,7 @@ class Wwww3qDatz_social_icon_widget_Sample extends Sample {
   Wwww3qDatz_social_icon_widget_Sample() : super('lib/app/modules/authentication/widget/social_icon_widget.dart', overwrite: true);
 
   @override
-  String get content =>
-      '''
+  String get content => '''
 part of '../views/authentication_view.dart';
 
 class SocialIcon extends StatelessWidget {
@@ -660,8 +652,7 @@ class Wwww3qDatz_wave_clipper_Sample extends Sample {
   Wwww3qDatz_wave_clipper_Sample() : super('lib/app/modules/authentication/widget/wave_clipper.dart', overwrite: true);
 
   @override
-  String get content =>
-      '''
+  String get content => '''
 part of '../views/authentication_view.dart';
 
 class WaveClipper1 extends CustomClipper<Path> {
@@ -751,8 +742,7 @@ class Wwww3qDatz_wave_draw_clippath_widget_Sample extends Sample {
   Wwww3qDatz_wave_draw_clippath_widget_Sample() : super('lib/app/modules/authentication/widget/wave_draw_clippath_widget.dart', overwrite: true);
 
   @override
-  String get content =>
-      '''
+  String get content => '''
 part of '../views/authentication_view.dart';
 
 class WaveDrawClipPathWidget extends StatelessWidget {

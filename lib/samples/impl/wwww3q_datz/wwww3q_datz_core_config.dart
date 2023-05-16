@@ -4,12 +4,11 @@ class Wwww3qDatzApiUrlSample extends Sample {
   Wwww3qDatzApiUrlSample() : super('lib/app/core/config/api_url.dart', overwrite: true);
 
   @override
-  String get content =>
-      '''
+  String get content => '''
 // ignore_for_file: non_constant_identifier_names
 
 class ApiUrl {
-  static String get base_url => 'https://animehay.live'; //baseUrl
+  static String get base_url => 'https://127.0.0.1'; //baseUrl
 
   //
   static String post_auth_login() => '/api/auth/login';
@@ -22,8 +21,7 @@ class Wwww3qDatzThemeConfigSample extends Sample {
   Wwww3qDatzThemeConfigSample() : super('lib/app/core/config/theme_config.dart', overwrite: true);
 
   @override
-  String get content =>
-      '''
+  String get content => '''
 import 'package:flutter/material.dart';
 
 import '../constants/color_constant.dart';

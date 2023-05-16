@@ -9,7 +9,7 @@ class Wwww3qDatzBaseConnectSample extends Sample {
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter_getx_base_project/app/core/config/api_url.dart';
+import '/app/core/config/api_url.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/request/request.dart';
 
@@ -186,7 +186,7 @@ class Wwww3qDatzBaseControllerSample extends Sample {
   @override
   String get content =>
       '''
-import 'package:flutter_getx_base_project/app/core/base/base_project.dart';
+import '/app/core/base/base_project.dart';
 import 'package:get/get.dart';
 
 export '../config/api_url.dart';

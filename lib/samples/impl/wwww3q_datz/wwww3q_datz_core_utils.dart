@@ -6,8 +6,7 @@ class Wwww3qDatz_utils_Sample extends Sample {
   Wwww3qDatz_utils_Sample() : super('lib/app/core/utils/utils.dart', overwrite: true);
 
   @override
-  String get content =>
-      '''
+  String get content => '''
 export '../../../generated/locales.g.dart';
 export 'extension/app_extension.dart';
 export 'helper.dart';
@@ -22,8 +21,7 @@ class Wwww3qDatz_print_Sample extends Sample {
   Wwww3qDatz_print_Sample() : super('lib/app/core/utils/print.dart', overwrite: true);
 
   @override
-  String get content =>
-      '''
+  String get content => '''
 // ignore_for_file: avoid_print
 //https://stackoverflow.com/questions/54018071/how-to-call-print-with-colorful-text-to-android-studio-console-in-flutter
 import 'dart:developer';
@@ -47,10 +45,9 @@ class Wwww3qDatz_limit_range_text_input_Sample extends Sample {
   Wwww3qDatz_limit_range_text_input_Sample() : super('lib/app/core/utils/limit_range_text_input.dart', overwrite: true);
 
   @override
-  String get content =>
-      '''
+  String get content => '''
 import 'package:flutter/services.dart';
-import 'package:flutter_getx_base_project/app/core/utils/extension/app_extension.dart';
+import '/app/core/utils/extension/app_extension.dart';
 
 class LimitRangeTextInput extends TextInputFormatter {
   LimitRangeTextInput({
@@ -101,8 +98,7 @@ class Wwww3qDatz_helper_Sample extends Sample {
   Wwww3qDatz_helper_Sample() : super('lib/app/core/utils/helper.dart', overwrite: true);
 
   @override
-  String get content =>
-      '''
+  String get content => '''
 import 'dart:convert';
 import 'dart:math';
 
@@ -167,8 +163,7 @@ class Wwww3qDatz_helper_widget_Sample extends Sample {
   Wwww3qDatz_helper_widget_Sample() : super('lib/app/core/utils/helper_widget.dart', overwrite: true);
 
   @override
-  String get content =>
-      '''
+  String get content => '''
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -452,8 +447,7 @@ class Wwww3qDatz_helper_reflect_Sample extends Sample {
   Wwww3qDatz_helper_reflect_Sample() : super('lib/app/core/utils/helper_reflect.dart', overwrite: true);
 
   @override
-  String get content =>
-      '''
+  String get content => '''
 // ignore_for_file: depend_on_referenced_packages
 
 import 'package:collection/collection.dart';
