@@ -26,10 +26,8 @@ void addAppPage(String name, String bindingDir, String viewDir) {
 
   var routesOrPath = 'Routes';
 
-  var indexRoutes = lines
-      .indexWhere((element) => element.trim().contains('static final routes'));
-  var index =
-      lines.indexWhere((element) => element.contains('];'), indexRoutes);
+  var indexRoutes = lines.indexWhere((element) => element.trim().contains('static final routes'));
+  var index = lines.indexWhere((element) => element.contains('];'), indexRoutes);
 
   var tabEspaces = 2;
   if (supportChildrenRoutes) {
@@ -37,36 +35,25 @@ void addAppPage(String name, String bindingDir, String viewDir) {
     var pathSplit = path.split('/');
     pathSplit.removeLast();
     pathSplit.removeLast();
-    pathSplit
-        .removeWhere((element) => element == 'app' || element == 'modules');
+    pathSplit.removeWhere((element) => element == 'app' || element == 'modules');
     var onPageIndex = -1;
     while (pathSplit.isNotEmpty && onPageIndex == -1) {
-      onPageIndex = lines.indexWhere(
-          (element) => element
-              .contains('_Paths.${pathSplit.last.snakeCase.toUpperCase()},'),
-          indexRoutes);
+      onPageIndex = lines.indexWhere((element) => element.contains('_Paths.${pathSplit.last.snakeCase.toUpperCase()},'), indexRoutes);
 
       pathSplit.removeLast();
     }
     if (onPageIndex != -1) {
-      var onPageStartIndex = lines
-          .sublist(0, onPageIndex)
-          .lastIndexWhere((element) => element.contains('GetPage'));
+      var onPageStartIndex = lines.sublist(0, onPageIndex).lastIndexWhere((element) => element.contains('GetPage'));
 
       var onPageEndIndex = -1;
 
       if (onPageStartIndex != -1) {
-        onPageEndIndex = lines.indexWhere(
-            (element) => element.startsWith(
-                '${_getTabs(_countTabs(lines[onPageStartIndex]))}),'),
-            onPageStartIndex);
+        onPageEndIndex = lines.indexWhere((element) => element.startsWith('${_getTabs(_countTabs(lines[onPageStartIndex]))}),'), onPageStartIndex);
       } else {
         _logInvalidFormart();
       }
       if (onPageEndIndex != -1) {
-        var indexChildrenStart = lines
-            .sublist(onPageStartIndex, onPageEndIndex)
-            .indexWhere((element) => element.contains('children'));
+        var indexChildrenStart = lines.sublist(onPageStartIndex, onPageEndIndex).indexWhere((element) => element.contains('children'));
         if (indexChildrenStart == -1) {
           tabEspaces = _countTabs(lines[onPageStartIndex]) + 1;
           index = onPageEndIndex;
@@ -76,10 +63,8 @@ void addAppPage(String name, String bindingDir, String viewDir) {
           tabEspaces++;
         } else {
           var indexChildrenEnd = -1;
-          indexChildrenEnd = lines.indexWhere(
-              (element) => element.startsWith(
-                  '${_getTabs(_countTabs(lines[onPageStartIndex]) + 1)}],'),
-              onPageStartIndex);
+          indexChildrenEnd =
+              lines.indexWhere((element) => element.startsWith('${_getTabs(_countTabs(lines[onPageStartIndex]) + 1)}],'), onPageStartIndex);
           if (indexChildrenEnd != -1) {
             index = indexChildrenEnd;
             tabEspaces = _countTabs(lines[onPageStartIndex]) + 2;
@@ -97,7 +82,7 @@ void addAppPage(String name, String bindingDir, String viewDir) {
   var line = '''${_getTabs(tabEspaces)}GetPage(
 ${_getTabs(tabEspaces + 1)}name: $routesOrPath.${nameSnakeCase.toUpperCase()}, 
 ${_getTabs(tabEspaces + 1)}page:()=> const ${namePascalCase}View(), 
-${_getTabs(tabEspaces + 1)}binding: ${namePascalCase}Binding(),
+${_getTabs(tabEspaces + 1)}binding: BindingsBuilder(() => Get.lazyPut(() => ${namePascalCase}Controller())),
 ${_getTabs(tabEspaces)}),''';
 
   var import = "import 'package:${PubspecUtils.projectName}/";

@@ -1,6 +1,5 @@
 import 'dart:io';
 
-
 import 'package:dcli/dcli.dart';
 import 'package:recase/recase.dart';
 
@@ -13,7 +12,6 @@ import '../../../../core/locales.g.dart';
 import '../../../../core/structure.dart';
 import '../../../../functions/create/create_single_file.dart';
 import '../../../../functions/routes/get_add_route.dart';
-import '../../../../samples/impl/get_binding.dart';
 import '../../../../samples/impl/get_controller.dart';
 import '../../../../samples/impl/get_view.dart';
 import '../../../interface/command.dart';
@@ -42,8 +40,7 @@ class CreatePageCommand extends Command {
   String? get hint => LocaleKeys.hint_create_page.tr;
 
   void checkForAlreadyExists(String? name) {
-    var newFileModel =
-        Structure.model(name, 'page', true, on: onCommand, folderName: name);
+    var newFileModel = Structure.model(name, 'page', true, on: onCommand, folderName: name);
     var pathSplit = Structure.safeSplitPath(newFileModel.path!);
 
     pathSplit.removeLast();
@@ -56,8 +53,7 @@ class CreatePageCommand extends Command {
           LocaleKeys.options_no.tr,
           LocaleKeys.options_rename.tr,
         ],
-        title:
-            Translation(LocaleKeys.ask_existing_page.trArgs([name])).toString(),
+        title: Translation(LocaleKeys.ask_existing_page.trArgs([name])).toString(),
       );
       final result = menu.choose();
       if (result.index == 0) {
@@ -107,25 +103,28 @@ class CreatePageCommand extends Command {
       ),
       'views',
     );
-    var bindingFile = handleFileCreate(
-      name,
-      'binding',
-      path,
-      extraFolder,
-      BindingSample(
-        '',
-        name,
-        '${name.pascalCase}Binding',
-        controllerDir,
-        isServer,
-        overwrite: overwrite,
-      ),
-      'bindings',
-    );
+
+    //? Chuyển generate Binding thành BindingsBuilder
+    // var bindingFile = handleFileCreate(
+    //   name,
+    //   'binding',
+    //   path,
+    //   extraFolder,
+    //   BindingSample(
+    //     '',
+    //     name,
+    //     '${name.pascalCase}Binding',
+    //     controllerDir,
+    //     isServer,
+    //     overwrite: overwrite,
+    //   ),
+    //   'bindings',
+    // );
 
     addRoute(
       name,
-      Structure.pathToDirImport(bindingFile.path),
+      //? thay tạm bindingDir=controllerDir
+      controllerDir, //Structure.pathToDirImport(bindingFile.path),
       Structure.pathToDirImport(viewFile.path),
     );
     LogService.success(LocaleKeys.sucess_page_create.trArgs([name.pascalCase]));
