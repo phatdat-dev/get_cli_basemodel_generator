@@ -178,16 +178,16 @@ class TranslationService extends Translations {
     Global.sharedPreferences.setString(StorageConstants.langCode, localeee.languageCode);
   }
 
-  static Future<Locale?> getLocaleFromLanguage() async {
+  static Locale getLocaleFromLanguage() {
     final langCode = Global.sharedPreferences.getString(StorageConstants.langCode);
 
-    if (langCode == null) return Get.deviceLocale;
+    if (langCode == null) return Get.deviceLocale!;
 
     for (int i = 0; i < locales.length; i++) {
       if (langCode == locales[i].languageCode) return locales[i];
     }
 
-    return Get.deviceLocale;
+    return Get.deviceLocale!;
   }
 
   @override

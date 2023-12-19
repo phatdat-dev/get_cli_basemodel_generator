@@ -133,7 +133,7 @@ class TypeDefinition {
     } else if (name == 'List') {
       // list of class
 
-      return "$fieldKey: json['$fieldKey'] != null ? List<$subtype>.from(( json['$fieldKey'] as List).map((x) => $subtype().fromJson(x))) : null,";
+      return "$fieldKey: (json['$fieldKey'] != null && json['$fieldKey'] is List<Map>) ? List<$subtype>.from(( json['$fieldKey'] as List).map((x) => $subtype().fromJson(x))) : null,";
     } else {
       // class
       return "$fieldKey : json['$key'] != null ? ${_buildParseClass(jsonKey)} : null,";

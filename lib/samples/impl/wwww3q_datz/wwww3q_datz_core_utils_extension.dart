@@ -7,8 +7,7 @@ class Wwww3qDatz_text_editing_controller_extension_Sample extends Sample {
       : super('lib/app/core/utils/extension/text_editing_controller_extension.dart', overwrite: true);
 
   @override
-  String get content =>
-      '''
+  String get content => '''
 import 'package:flutter/material.dart';
 
 
@@ -24,8 +23,7 @@ class Wwww3qDatz_string_extension_Sample extends Sample {
   Wwww3qDatz_string_extension_Sample() : super('lib/app/core/utils/extension/string_extension.dart', overwrite: true);
 
   @override
-  String get content =>
-      '''
+  String get content => '''
 import 'dart:convert';
 import 'dart:math';
 
@@ -55,8 +53,7 @@ class Wwww3qDatz_num_extension_Sample extends Sample {
   Wwww3qDatz_num_extension_Sample() : super('lib/app/core/utils/extension/num_extension.dart', overwrite: true);
 
   @override
-  String get content =>
-      '''
+  String get content => '''
 import 'package:intl/intl.dart';
 
 extension NumExtension on num {
@@ -75,9 +72,7 @@ class Wwww3qDatz_map_extension_Sample extends Sample {
   Wwww3qDatz_map_extension_Sample() : super('lib/app/core/utils/extension/map_extension.dart', overwrite: true);
 
   @override
-  String get content =>
-      '''
-import 'list_extension.dart';
+  String get content => '''
 
 extension MapExtension<K, V> on Map<K, V> {
   Iterable<MapEntry<K, V>> _filterr(bool Function(MapEntry<K, V> entry) f) sync* {
@@ -161,30 +156,7 @@ extension MapExtension<K, V> on Map<K, V> {
     return keys.elementAt(index);
   }
 
-  // from GetX
-
-  void addIf(dynamic condition, K key, V value) {
-    if (condition is Condition) condition = condition();
-    if (condition is bool && condition) {
-      this[key] = value;
-    }
-  }
-
-  void addAllIf(dynamic condition, Map<K, V> values) {
-    if (condition is Condition) condition = condition();
-    if (condition is bool && condition) addAll(values);
-  }
-
-  void assign(K key, V val) {
-    clear();
-    this[key] = val;
-  }
-
-  void assignAll(Map<K, V> val) {
-    if (this == val) return;
-    clear();
-    addAll(val);
-  }
+  
 }
 ''';
 }
@@ -193,10 +165,7 @@ class Wwww3qDatz_list_extension_Sample extends Sample {
   Wwww3qDatz_list_extension_Sample() : super('lib/app/core/utils/extension/list_extension.dart', overwrite: true);
 
   @override
-  String get content =>
-      '''
-typedef Condition = bool Function();
-
+  String get content => '''
 extension ListExtension<E> on List<E> {
   /// Provide access to the generic type at runtime.
   Type get subType => E;
@@ -221,8 +190,7 @@ class Wwww3qDatz_iterable_extension_Sample extends Sample {
   Wwww3qDatz_iterable_extension_Sample() : super('lib/app/core/utils/extension/iterable_extension.dart', overwrite: true);
 
   @override
-  String get content =>
-      '''
+  String get content => '''
 //Searching List<List<T>> in Dart
 extension FlattenFind<T extends Comparable> on Iterable<Iterable<T>> {
   bool containsElement(T value) {
@@ -239,8 +207,7 @@ class Wwww3qDatz_datetime_extension_Sample extends Sample {
   Wwww3qDatz_datetime_extension_Sample() : super('lib/app/core/utils/extension/datetime_extension.dart', overwrite: true);
 
   @override
-  String get content =>
-      '''
+  String get content => '''
 import 'package:intl/intl.dart';
 
 extension DateTimeExtension on DateTime {
@@ -280,8 +247,7 @@ class Wwww3qDatz_app_extension_Sample extends Sample {
   Wwww3qDatz_app_extension_Sample() : super('lib/app/core/utils/extension/app_extension.dart', overwrite: true);
 
   @override
-  String get content =>
-      '''
+  String get content => '''
 export 'datetime_extension.dart';
 export 'iterable_extension.dart';
 export 'list_extension.dart';
