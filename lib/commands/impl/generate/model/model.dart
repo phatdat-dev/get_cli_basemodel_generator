@@ -33,7 +33,7 @@ class GenerateModelCommand extends Command {
     }
 
     FileModel newFileModel;
-    final classGenerator = ModelGenerator(name, containsArg('--private'), containsArg('--withCopy'));
+    final classGenerator = ModelGenerator(name, containsArg('--private'), containsArg('--copyWith'));
 
     newFileModel = Structure.model(name, 'model', false, on: onCommand);
 

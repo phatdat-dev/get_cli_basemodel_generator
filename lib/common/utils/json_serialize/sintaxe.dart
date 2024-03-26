@@ -181,8 +181,6 @@ class ClassDefinition {
 
   bool get privateFields => _privateFields;
 
-  bool? get copyConstructor => _withCopyConstructor;
-
   List<Dependency> get dependencies {
     final dependenciesList = <Dependency>[];
     final keys = fields.keys;
@@ -195,7 +193,7 @@ class ClassDefinition {
     return dependenciesList;
   }
 
-  ClassDefinition(this._name, [this._privateFields = false, this._withCopyConstructor = false]);
+  ClassDefinition(this._name, [this._privateFields = false, this._withCopyConstructor = true]);
 
   @override
   bool operator ==(dynamic other) {
@@ -246,7 +244,7 @@ class ClassDefinition {
       final f = fields[key]!;
       final fieldName = fixFieldName(key, typeDef: f, privateField: privateFields);
       final sb = StringBuffer();
-      sb.write('\t ' * indentLevel);
+      sb.write('\t' * indentLevel);
       _addTypeDef(f, sb);
       sb.write(' $fieldName$delimiter');
       return sb.toString();
@@ -303,35 +301,35 @@ class ClassDefinition {
 
   String get _defaultConstructor {
     final sb = StringBuffer();
-    sb.write('\t$name({');
+    sb.write('\t$name({\n');
     var i = 0;
     var len = fields.keys.length - 1;
     for (var key in fields.keys) {
       final f = fields[key];
       final fieldName = fixFieldName(key, typeDef: f, privateField: privateFields);
-      sb.write('this.$fieldName');
+      sb.write('\t\t this.$fieldName');
       //sb.write('$fieldName');
       if (i != len) {
-        sb.write(', ');
+        sb.write(',\n');
       }
       i++;
     }
 
-    sb.write('});');
+    sb.write(',\n\t});');
     return sb.toString();
   }
 
   String get _copyConstructor {
     final sb = StringBuffer();
-    sb.write('\t$name copyWith({');
+    sb.write('\t$name copyWith({\n');
     sb.write(_generateFieldList(indentLevel: 2, delimiter: ','));
-    sb.write('\t}) {');
-    sb.write('\t\treturn $name(');
+    sb.write('\n\t}) {');
+    sb.write('\n\t\t return $name(\n');
 
     for (var key in fields.keys) {
       final f = fields[key];
       final fieldName = fixFieldName(key, typeDef: f, privateField: privateFields);
-      sb.write('$fieldName: $fieldName ?? this.$fieldName,');
+      sb.write('\t\t\t $fieldName: $fieldName ?? this.$fieldName,\n');
     }
 
     sb.write(');'); // return $name(...
@@ -341,12 +339,15 @@ class ClassDefinition {
 
   String get _jsonParseFunc {
     final sb = StringBuffer();
-    sb.write('\t@override\n\t');
-    sb.write('\t$name fromJson(Map<String, dynamic> json) => $name(\n');
+    //
+    sb.write('factory $name.fromJson(Map<String, dynamic> json) => $name(\n');
     for (var k in fields.keys) {
       sb.write('\t\t${fields[k]!.jsonParseExpression(k, privateFields)}\n');
     }
     sb.write('\t);');
+    //
+    sb.write('\n\n\t@override\n\t');
+    sb.write('$name fromJson(Map<String, dynamic> json) => $name.fromJson(json);');
     return sb.toString();
   }
 
@@ -361,33 +362,18 @@ class ClassDefinition {
     return sb.toString();
   }
 
-  String get _copyWith {
-    final sb = StringBuffer();
-    sb.write('''\t 
-    $name copyWith({
-      ${_fieldList.replaceAll(";", ",")}
-    }) => $name(''');
-
-    for (var k in fields.keys) {
-      sb.write('${fields[k]!.jsonParseCopyWith(k, privateFields)}\n');
-    }
-
-    sb.write(');');
-    return sb.toString();
-  }
-
   @override
   String toString() {
     if (privateFields) {
       return 'class $name extends BaseModel<$name> {\n$_fieldList\n\n$_defaultPrivateConstructor\n\n'
-          '$_gettersSetters\n\n$_jsonParseFunc\n\n$_jsonGenFunc\n$_copyWith\n }\n';
+          '$_gettersSetters\n\n$_jsonParseFunc\n\n$_jsonGenFunc\n }\n';
     } else {
-      if (copyConstructor!) {
+      if (_withCopyConstructor!) {
         return 'class $name extends BaseModel<$name> {\n$_fieldList\n\n$_defaultConstructor'
-            '\n\n$_copyConstructor\n\n$_jsonParseFunc\n\n$_jsonGenFunc\n$_copyWith\n }\n';
+            '\n\n$_jsonParseFunc\n\n$_jsonGenFunc\n$_copyConstructor\n }\n';
       } else {
         return 'class $name extends BaseModel<$name> {\n$_fieldList\n\n$_defaultConstructor'
-            '\n\n$_jsonParseFunc\n\n$_jsonGenFunc\n$_copyWith\n }\n';
+            '\n\n$_jsonParseFunc\n\n$_jsonGenFunc\n }\n';
       }
     }
   }

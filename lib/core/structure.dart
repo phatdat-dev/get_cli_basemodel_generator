@@ -10,9 +10,7 @@ import 'locales.g.dart';
 
 class Structure {
   static final Map<String, String> _paths = {
-    'page': Directory(replaceAsExpected(
-                path: '${Directory.current.path} /lib/pages/'))
-            .existsSync()
+    'page': Directory(replaceAsExpected(path: '${Directory.current.path} /lib/pages/')).existsSync()
         ? replaceAsExpected(path: 'lib/pages')
         : replaceAsExpected(path: 'lib/app/modules'),
     'widget': replaceAsExpected(path: 'lib/app/widgets/'),
@@ -26,16 +24,13 @@ class Structure {
     'view': replaceAsExpected(path: 'lib/app/views/'),
     //artekko files
     'screen': replaceAsExpected(path: 'lib/presentation'),
-    'controller.binding':
-        replaceAsExpected(path: 'lib/infrastructure/navigation/bindings'),
-    'navigation': replaceAsExpected(
-        path: 'lib/infrastructure/navigation/navigation.dart'),
+    'controller.binding': replaceAsExpected(path: 'lib/infrastructure/navigation/bindings'),
+    'navigation': replaceAsExpected(path: 'lib/infrastructure/navigation/navigation.dart'),
     //generator files
     'generate_locales': replaceAsExpected(path: 'lib/generated'),
   };
 
-  static FileModel model(String? name, String command, bool wrapperFolder,
-      {String? on, String? folderName}) {
+  static FileModel model(String? name, String command, bool wrapperFolder, {String? on, String? folderName}) {
     if (on != null && on != '') {
       on = replaceAsExpected(path: on).replaceAll('\\\\', '\\');
       var current = Directory('lib');
@@ -44,7 +39,6 @@ class Structure {
         if (element is File) {
           return false;
         }
-
         return '${element.path}${p.separator}'.contains('$on${p.separator}');
       }, orElse: () {
         return list.firstWhere((element) {
@@ -57,7 +51,7 @@ class Structure {
           throw CliException(LocaleKeys.error_folder_not_found.trArgs([on]));
         });
       });
-
+      
       return FileModel(
         name: name,
         path: Structure.getPathWithName(
@@ -99,8 +93,7 @@ class Structure {
     }
   }
 
-  static String? getPathWithName(String? firstPath, String secondPath,
-      {bool createWithWrappedFolder = false, required String? folderName}) {
+  static String? getPathWithName(String? firstPath, String secondPath, {bool createWithWrappedFolder = false, required String? folderName}) {
     late String betweenPaths;
     if (Platform.isWindows) {
       betweenPaths = '\\\\';
@@ -109,11 +102,7 @@ class Structure {
     }
     if (betweenPaths.isNotEmpty) {
       if (createWithWrappedFolder) {
-        return firstPath! +
-            betweenPaths +
-            folderName! +
-            betweenPaths +
-            secondPath;
+        return firstPath! + betweenPaths + folderName! + betweenPaths + secondPath;
       } else {
         return firstPath! + betweenPaths + secondPath;
       }
@@ -122,13 +111,11 @@ class Structure {
   }
 
   static List<String> safeSplitPath(String path) {
-    return path.replaceAll('\\', '/').split('/')
-      ..removeWhere((element) => element.isEmpty);
+    return path.replaceAll('\\', '/').split('/')..removeWhere((element) => element.isEmpty);
   }
 
   static String pathToDirImport(String path) {
-    var pathSplit = safeSplitPath(path)
-      ..removeWhere((element) => element == '.' || element == 'lib');
+    var pathSplit = safeSplitPath(path)..removeWhere((element) => element == '.' || element == 'lib');
     return pathSplit.join('/');
   }
 }

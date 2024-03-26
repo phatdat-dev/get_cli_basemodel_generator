@@ -8,6 +8,9 @@ import 'package:get_cli/get_cli.dart';
 Future<void> main(List<String> arguments) async {
   var time = Stopwatch();
   time.start();
+  // test command
+  // arguments = ["generate", "model", "on", "models/response", "with", "assets/import_response.json", "--copyWith"];
+  // run
   final command = GetCli(arguments).findCommand();
 
   if (arguments.contains('--debug')) {
