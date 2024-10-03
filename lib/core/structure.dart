@@ -10,7 +10,7 @@ import 'locales.g.dart';
 
 class Structure {
   static final Map<String, String> _paths = {
-    'page': Directory(replaceAsExpected(path: '${Directory.current.path} /lib/pages/')).existsSync()
+    'page': Directory(replaceAsExpected(path: '${Directory.current.path}/lib/pages/')).existsSync()
         ? replaceAsExpected(path: 'lib/pages')
         : replaceAsExpected(path: 'lib/app/modules'),
     'widget': replaceAsExpected(path: 'lib/app/widgets/'),
@@ -39,6 +39,7 @@ class Structure {
         if (element is File) {
           return false;
         }
+
         return '${element.path}${p.separator}'.contains('$on${p.separator}');
       }, orElse: () {
         return list.firstWhere((element) {
@@ -51,7 +52,7 @@ class Structure {
           throw CliException(LocaleKeys.error_folder_not_found.trArgs([on]));
         });
       });
-      
+
       return FileModel(
         name: name,
         path: Structure.getPathWithName(
@@ -75,7 +76,7 @@ class Structure {
     );
   }
 
-  static String replaceAsExpected({required String path, String? replaceChar}) {
+  static String replaceAsExpected({required String path}) {
     if (path.contains('\\')) {
       if (Platform.isLinux || Platform.isMacOS) {
         return path.replaceAll('\\', '/');

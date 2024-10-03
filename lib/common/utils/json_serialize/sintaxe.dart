@@ -70,8 +70,9 @@ class TypeDefinition {
   TypeDefinition(this.name, {this.subtype, this.isAmbiguous, Node? astNode}) {
     if (subtype == null) {
       _isPrimitive = isPrimitiveType(name);
-
-      if (name == 'int' && isASTLiteralDouble(astNode)) name = 'double';
+      if (name == 'int' && isASTLiteralDouble(astNode)) {
+        name = 'double';
+      }
     } else {
       _isPrimitive = isPrimitiveType('$name<$subtype>');
     }
@@ -86,7 +87,7 @@ class TypeDefinition {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     if (other is TypeDefinition) {
       return name == other.name && subtype == other.subtype && isAmbiguous == other.isAmbiguous && _isPrimitive == other._isPrimitive;
     }
@@ -154,12 +155,6 @@ class TypeDefinition {
       return "if ($fieldKey != null) { data['$key'] = ${_buildToJsonClass(fieldKey, nullSafe: PubspecUtils.nullSafeSupport)}; }";
     }
   }
-
-  String jsonParseCopyWith(String key, bool privateField) {
-    final fieldKey = fixFieldName(key, typeDef: this, privateField: privateField);
-
-    return '$fieldKey : $fieldKey ?? this.$fieldKey,';
-  }
 }
 
 class Dependency {
@@ -181,6 +176,8 @@ class ClassDefinition {
 
   bool get privateFields => _privateFields;
 
+  bool? get copyConstructor => _withCopyConstructor;
+
   List<Dependency> get dependencies {
     final dependenciesList = <Dependency>[];
     final keys = fields.keys;
@@ -193,10 +190,10 @@ class ClassDefinition {
     return dependenciesList;
   }
 
-  ClassDefinition(this._name, [this._privateFields = false, this._withCopyConstructor = true]);
+  ClassDefinition(this._name, [this._privateFields = false, this._withCopyConstructor = false]);
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     if (other is ClassDefinition) {
       var otherClassDef = other;
       return isSubsetOf(otherClassDef) && otherClassDef.isSubsetOf(this);
@@ -244,7 +241,7 @@ class ClassDefinition {
       final f = fields[key]!;
       final fieldName = fixFieldName(key, typeDef: f, privateField: privateFields);
       final sb = StringBuffer();
-      sb.write('\t' * indentLevel);
+      sb.write('\t ' * indentLevel);
       _addTypeDef(f, sb);
       sb.write(' $fieldName$delimiter');
       return sb.toString();
@@ -368,7 +365,7 @@ class ClassDefinition {
       return 'class $name extends BaseModel<$name> {\n$_fieldList\n\n$_defaultPrivateConstructor\n\n'
           '$_gettersSetters\n\n$_jsonParseFunc\n\n$_jsonGenFunc\n }\n';
     } else {
-      if (_withCopyConstructor!) {
+      if (copyConstructor!) {
         return 'class $name extends BaseModel<$name> {\n$_fieldList\n\n$_defaultConstructor'
             '\n\n$_jsonParseFunc\n\n$_jsonGenFunc\n$_copyConstructor\n }\n';
       } else {

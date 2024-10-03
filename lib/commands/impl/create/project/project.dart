@@ -1,13 +1,13 @@
 import 'dart:io';
 
 import 'package:dcli/dcli.dart';
+import 'package:get_cli/extensions.dart';
 import 'package:path/path.dart' as p;
 import 'package:recase/recase.dart';
 
 import '../../../../common/menu/menu.dart';
 import '../../../../common/utils/pubspec/pubspec_utils.dart';
 import '../../../../common/utils/shell/shel.utils.dart';
-import '../../../../core/internationalization.dart';
 import '../../../../core/locales.g.dart';
 import '../../../../core/structure.dart';
 import '../../../../samples/impl/analysis_options.dart';
@@ -23,7 +23,7 @@ class CreateProjectCommand extends Command {
     final menu = Menu([
       'Flutter Project',
       'Get Server',
-    ],title: 'Select which type of project you want to create ?');
+    ], title: 'Select which type of project you want to create ?');
     final result = menu.choose();
     String? nameProject = name;
     if (name == '.') {
@@ -65,16 +65,9 @@ class CreateProjectCommand extends Command {
 
       var androidLang = androidResult.index == 0 ? 'kotlin' : 'java';
 
-      final nullSafeMenu = Menu(
-          [LocaleKeys.options_yes.tr, LocaleKeys.options_no.tr],
-          title: LocaleKeys.ask_use_null_safe.tr);
-      final nullSafeMenuResult = nullSafeMenu.choose();
-
-      var useNullSafe = nullSafeMenuResult.index == 0;
-
       final linterMenu = Menu([
-        'yes',
-        'no',
+        'Yes',
+        'No',
       ], title: LocaleKeys.ask_use_linter.tr);
       final linterResult = linterMenu.choose();
 
@@ -82,9 +75,6 @@ class CreateProjectCommand extends Command {
 
       File('test/widget_test.dart').writeAsStringSync('');
 
-      if (useNullSafe) {
-        await ShellUtils.activatedNullSafe();
-      }
       switch (linterResult.index) {
         case 0:
           if (PubspecUtils.isServerProject) {
