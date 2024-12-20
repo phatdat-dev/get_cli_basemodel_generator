@@ -171,6 +171,8 @@ class PubspecUtils {
   //   var value = CliYamlToString().toYamlString(pub.toJson());
   //   _pubspecFile.writeAsStringSync(value);
   // }
+
+  static Version get sdkVersion => pubSpec.environment!['sdk']! as Version;
 }
 
 /// avoids multiple reads in one file
